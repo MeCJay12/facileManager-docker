@@ -2,8 +2,8 @@ FROM php:7.4-apache
 
 WORKDIR /src
 
-ENV	DNS_Version=5.3.0
-ENV	Core_Version=4.4.0
+ENV	DNS_Version=5.3.3
+ENV	Core_Version=4.5.0
 RUN	apt-get update \
 	&& apt-get -qqy install wget bind9 dnsutils sudo
 RUN	wget http://facilemanager.com/download/module/fmdns-$DNS_Version.tar.gz \
