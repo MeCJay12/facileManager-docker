@@ -1,6 +1,6 @@
 --- init.php.backup	2022-02-08 21:49:57.167830899 -0600
 +++ init.php	2022-02-08 21:50:08.351734589 -0600
-@@ -154,7 +154,7 @@
+@@ -157,7 +157,7 @@
  						. 'AllowOverride None in your configuration may be blocking the use of .htaccess or %s is not resolvable.'),
  						$fm_name, $_SERVER['SERVER_NAME']);
  				if ($single_check) {
@@ -9,10 +9,4 @@
  				} else {
  					$requirement_check .= displayProgress(_('Test Rewrites'), false, 'display', $message);
  					$error = true;
-@@ -173,4 +173,4 @@
- 	return $requirement_check;
- }
- 
--?>
-\ No newline at end of file
-+?>
+					
