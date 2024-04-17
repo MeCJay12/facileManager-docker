@@ -70,7 +70,7 @@ docker run -d \
 ## Notes
 
 * fMDNS client logs will show bind logs by default. To show all DNS requests in these logs add `querylog = yes` to Config -> Options in fM server.
-* In some situations, reverse proxies can prevent the server from recognizing a rebooting/reinstalling client. The fix is to add a macvlan/ipvlan network and IP to your fM server container for the clients to authenticate to directly. Ex.:
+* In some situations, reverse proxies can prevent the server from upgrading or recognizing a rebooting/reinstalling client. The fix is to add a macvlan/ipvlan network and IP to your fM server container to connect to directly. Ex.:
 ```
 docker network create \
 	-d macvlan \
