@@ -1,6 +1,6 @@
 FROM php:7.4-apache
 
-ENV Version=4.6.1
+ENV Version=4.6.2
 WORKDIR /src
 
 RUN	apt-get update \

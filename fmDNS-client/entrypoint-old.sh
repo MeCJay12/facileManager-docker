@@ -1,8 +1,12 @@
 #!/bin/bash
 
-REACHABLE() {
-	curl --output /dev/null --silent --head --fail $FACILE_MANAGER_HOST
-}
+echo "Waiting for fmDNS master to become available"
+printf '.'
+until $(curl --output /dev/null --silent --head --fail $FACILE_MANAGER_HOST); do
+	printf '.'
+	sleep 1
+done
+echo
 
 # Set variable defaults if not user provided
 if [[ -z $FACILE_MANAGER_HOST ]] ; then FACILE_MANAGER_HOST="localhost" ; fi
@@ -25,25 +29,20 @@ sed -i 's@\$FACILE_MANAGER_HOST@'$FACILE_MANAGER_HOST'@' /usr/local/facileManage
 sed -i 's@\$FACILE_MANAGER_AUTHKEY@'$FACILE_MANAGER_AUTHKEY'@' /usr/local/facileManager/config.inc.php
 sed -i 's@\$FACILE_CLIENT_SERIAL_NUMBER@'$FACILE_CLIENT_SERIAL_NUMBER'@' /usr/local/facileManager/config.inc.php
 
-if [[ ! -f /etc/bind/named.conf ]] ; then
-	echo "Waiting for fmDNS master to become available"
-	printf '.'
-	until $(REACHABLE); do
-		printf '.'
-		sleep 1
-	done
-	echo
-
-	# Connects to server & downloads configs if existing client
-	OUTPUT=$( printf "h\n/var/www/html/\n" | php /usr/local/facileManager/fmDNS/client.php install )
-	echo "$OUTPUT"
-	if [[ "$OUTPUT" == *"Installation failed"* ]] ; then exit ; fi
-fi
-
-if $(REACHABLE) ; then
-	echo "FM server is reachable. Building config."
-	php /usr/local/facileManager/fmDNS/client.php buildconf
-fi
+# Connects to server & downloads configs if existing client
+output=$( printf "h\n/var/www/html/\n" | php /usr/local/facileManager/fmDNS/client.php install )
+echo "$output"
+case "$output" in
+	"fmDNS is already installed.")
+		php /usr/local/facileManager/fmDNS/client.php buildconf
+		;;
+	*"Welcome to the fmDNS installer."*)
+		php /usr/local/facileManager/fmDNS/client.php buildconf
+		;;
+	*"Installation failed"*)
+		exit
+		;;
+esac
 
 # Make it so that Apache can run sudo commands in order to re-generate the bind9 zone files
 cat <<EOF >> /etc/sudoers
