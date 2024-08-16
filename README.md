@@ -58,19 +58,21 @@ docker run -d \
 	--name fmDNS \
 	-p 53:53 \
 	-p 53:53/udp \
-	-p 80:80 \					# Client uses http for update
-	-h fmDNS.exmaple.com \				# Optional but sets the client name in fM server on install
+	-p 80:80 \					# Server connects to with http for config updates.
+	-h fmDNS.exmaple.com \				# Optional, sets the client name in fM server on install.
+	-v /DataDir:/etc/bind/ \			# Optional, caches bind configs so client can start if FM is unreachable.
 	-e FACILE_MANAGER_HOST=FM./ \
 	-e FACILE_CLIENT_SERIAL_NUMBER=999999999 \
-	-e TZ="America/New_York" \
+	-e TZ="America/New_York" \			# Optional, sets timezone for easier to read log timestamps.
 	mecjay12/fmdns \
 	apache						# Optional, Docker logs will show Apache logs instead of Bind logs.
 ```
 
 ## Notes
 
+* Noticed a behavior in the client on 6.0.3 and 6.0.6 where changes are not accepted from the server unless `php /usr/local/facileManager/fmDNS/client.php buildconf` is issued manually once.
 * fMDNS client logs will show bind logs by default. To show all DNS requests in these logs add `querylog = yes` to Config -> Options in fM server.
-* In some situations, reverse proxies can prevent the server from upgrading or recognizing a rebooting/reinstalling client. The fix is to add a macvlan/ipvlan network and IP to your fM server container to connect to directly. Ex.:
+* In some situations, reverse proxies can prevent the server from upgrading or recognizing a rebooting/reinstalling client. The workaround is to bypass the proxy for the clients and upgrades. You can use macvlan, ipvlan, or simply an additional port. Ex.:
 ```
 docker network create \
 	-d macvlan \
@@ -83,5 +85,5 @@ docker network connect \
 	macvlan --ip 192.168.0.10 fM
 ```
 * Some Linux distros ship with systemd-resolved which binds to port 53. There are two solutions to this:
-* 	Follow [these steps](https://www.linuxuprising.com/2020/07/ubuntu-how-to-free-up-port-53-used-by.html) to unbind the service for fmDNS.
-* 	Use a macvlan/ipvlan so the client listens on a different IP than the host. With this fix, the host won't be able to easily use the container for DNS.
+	* Follow [these steps](https://www.linuxuprising.com/2020/07/ubuntu-how-to-free-up-port-53-used-by.html) to unbind the service for fmDNS.
+	* Use a macvlan/ipvlan so the client listens on a different IP than the host. With this fix, the host won't be able to easily use the container for DNS.
