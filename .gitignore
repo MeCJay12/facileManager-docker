@@ -1,4 +1,4 @@
-.env
-mysql-data
-fmdns-log
-traefik-data/acme.json 
+facileManager-server/facileManager-server.tar
+facileManager-server/facileManager-server.tar.gz
+fmDNS-client/fmDNS-client.tar
+fmDNS-client/fmDNS-client.tar.gz
