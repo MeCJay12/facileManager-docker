@@ -2,8 +2,9 @@ FROM php:7.4-apache
 
 WORKDIR /src
 
-ENV  DNS_Version=6.2.0
-ENV  Core_Version=4.7.0
+ENV  DNS_Version=7.1.4
+ENV  Core_Version=5.3.3
+
 RUN  apt-get update \
   && apt-get -qqy install wget bind9 dnsutils sudo
 RUN  wget http://facilemanager.com/download/module/fmdns-$DNS_Version.tar.gz \
@@ -11,7 +12,8 @@ RUN  wget http://facilemanager.com/download/module/fmdns-$DNS_Version.tar.gz \
   && tar -xvf fmdns-$DNS_Version.tar.gz \
   && tar -xvf facilemanager-core-$Core_Version.tar.gz \
   && mv facileManager/client/facileManager /usr/local \
-  && ln -s /usr/local/facileManager/www /var/www/html/fM
+  && ln -s /usr/local/facileManager/www /var/www/html/fM \
+  && rm *.tar.gz
 
 COPY config.inc.php /usr/local/facileManager/
 COPY entrypoint.sh /
