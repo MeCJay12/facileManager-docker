@@ -1,11 +1,11 @@
 FROM php:7.4-apache
 
-ENV Version=5.3.3
+ENV Version=5.4.4
 WORKDIR /src
 
 RUN  apt-get update \
   && apt-get -qqy install wget libldb-dev libldap2-dev ssh iputils-ping dnsutils bind9-utils mariadb-client \
-  && wget http://facilemanager.com/download/facilemanager-complete-$Version.tar.gz \
+  && wget https://facilemanager.com/download/facilemanager-complete-$Version.tar.gz \
   && tar -xvf facilemanager-complete-$Version.tar.gz \
   && mv facileManager/server/* /var/www/html/ \
   && mkdir /fm_tmp/ \
@@ -21,7 +21,6 @@ COPY php.ini /usr/local/etc/php/php.ini
 COPY *.patch /var/www/html/
 
 RUN patch /var/www/html/fm-includes/init.php /var/www/html/init.php.patch
-RUN patch /var/www/html/fm-modules/fmDNS/functions.php /var/www/html/functions.php.patch
 
 RUN  rm -rf /var/lib/apt/lists/* \
   && rm -rf /src/facileManager
