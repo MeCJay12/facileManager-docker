@@ -2,8 +2,8 @@ FROM php:7.4-apache
 
 WORKDIR /src
 
-ENV  DNS_Version=7.3.0
-ENV  Core_Version=5.4.4
+ENV  DNS_Version=7.4.1
+ENV  Core_Version=6.0.3
 
 RUN  apt-get update \
   && apt-get -qqy install wget bind9 dnsutils sudo
@@ -25,7 +25,10 @@ ENV FACILE_CLIENT_SERIAL_NUMBER=
 ENV FACILE_CLIENT_LOG_FILE=
 
 RUN  rm -rf /var/lib/apt/lists/* \
-  && rm -rf /src/facileManager
+  && rm -rf /src/* \
+	&& apt -y remove wget \
+	&& apt -y autoremove \
+	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 CMD ["sudo -u bind named -g"]
 ENTRYPOINT ["/entrypoint.sh"]
