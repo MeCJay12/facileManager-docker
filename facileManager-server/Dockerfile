@@ -26,3 +26,5 @@ RUN  rm -rf /var/lib/apt/lists/* \
 	&& apt -y remove wget \
 	&& apt -y autoremove \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+  
+HEALTHCHECK CMD curl --fail --silent http://localhost/ 1>/dev/null || exit 1

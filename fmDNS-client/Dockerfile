@@ -30,5 +30,6 @@ RUN  rm -rf /var/lib/apt/lists/* \
 	&& apt -y autoremove \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+HEALTHCHECK CMD nslookup google.com localhost 1>/dev/null || exit 1
 CMD ["sudo -u bind named -g"]
 ENTRYPOINT ["/entrypoint.sh"]

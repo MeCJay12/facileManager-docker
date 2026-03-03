@@ -64,6 +64,7 @@ docker run -d \
 	-e FACILE_MANAGER_HOST=FM./ \
 	-e FACILE_CLIENT_SERIAL_NUMBER=999999999 \
 	-e TZ="America/New_York" \			# Optional, sets timezone for easier to read log timestamps.
+  --health-cmd="nslookup google.com localhost 1>/dev/null || exit 1" # Optional, sets a DNS record to health check against.
 	mecjay12/fmdns \
 	apache						# Optional, Docker logs will show Apache logs instead of Bind logs.
 ```
