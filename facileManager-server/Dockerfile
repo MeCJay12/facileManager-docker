@@ -1,6 +1,6 @@
-FROM php:7.4-apache
+FROM php:8.4-apache
 
-ENV Version=6.0.3
+ENV Version=6.0.9
 WORKDIR /src
 
 RUN  apt-get update \
@@ -25,6 +25,7 @@ RUN  rm -rf /var/lib/apt/lists/* \
   && rm -rf /src/* \
 	&& apt -y remove wget \
 	&& apt -y autoremove \
+  && apt -y clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
   
 HEALTHCHECK CMD curl --fail --silent http://localhost/ 1>/dev/null || exit 1

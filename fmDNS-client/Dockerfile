@@ -1,9 +1,9 @@
-FROM php:7.4-apache
+FROM php:8.4-apache
 
 WORKDIR /src
 
-ENV  DNS_Version=7.4.1
-ENV  Core_Version=6.0.3
+ENV  DNS_Version=7.4.7
+ENV  Core_Version=6.0.9
 
 RUN  apt-get update \
   && apt-get -qqy install wget bind9 dnsutils sudo
@@ -28,6 +28,7 @@ RUN  rm -rf /var/lib/apt/lists/* \
   && rm -rf /src/* \
 	&& apt -y remove wget \
 	&& apt -y autoremove \
+  && apt -y clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 HEALTHCHECK CMD nslookup google.com localhost 1>/dev/null || exit 1
